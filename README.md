@@ -1,0 +1,1 @@
+# azure-priv-dns-resolv
