@@ -1,0 +1,37 @@
+#cloud-config
+package_upgrade: true
+packages:
+   - apt-transport-https
+   - bind9
+   - bind9utils
+   - bind9-doc
+   - dnsutils
+   - inetutils-traceroute
+write_files:
+   - path: /etc/bind/named.conf.local
+     owner: root:root
+     permissions: '0644'   
+     content: |
+         zone "acme-corp.net" {
+            type master;
+            file "/etc/bind/acme-corp.net.zone";
+         };
+   - path: /etc/bind/acme-corp.net.zone
+     owner: root:root
+     permissions: '0644'   
+     content: |
+         $TTL    604800
+         @       IN      SOA     ns.acme-corp.net. root.acme-corp.net. (
+                                       1         ; Serial
+                                 604800         ; Refresh
+                                 86400         ; Retry
+                                 2419200         ; Expire
+                                 604800 )       ; Negative Cache TTL
+         ;
+
+         @      IN NS ns.acme-corp.net.
+         ns     IN A  10.0.0.4
+         server1   IN A  10.0.0.5
+runcmd:
+   - named-checkconf
+   - sudo systemctl restart bind9

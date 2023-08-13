@@ -9,8 +9,9 @@ param name string
 @description('Primary location for all resources')
 param location string
 
-@description('Id of the user or app to assign application roles')
-param principalId string = ''
+param vmCustomData string
+param adminUsername string
+param adminPasswordOrKey string
 
 resource resourceGroup 'Microsoft.Resources/resourceGroups@2021-04-01' = {
   name: '${name}-rg'
@@ -18,16 +19,17 @@ resource resourceGroup 'Microsoft.Resources/resourceGroups@2021-04-01' = {
 }
 
 var resourceToken = toLower(uniqueString(subscription().id, name, location))
-var tags = {
-}
+var tags = {}
 
 module resources './resources.bicep' = {
   name: 'resources-${resourceToken}'
   scope: resourceGroup
   params: {
-    name: name
     location: location
     resourceToken: resourceToken
     tags: tags
+    vmCustomData: vmCustomData
+    adminUsername: adminUsername
+    adminPasswordOrKey: adminPasswordOrKey
   }
 }
