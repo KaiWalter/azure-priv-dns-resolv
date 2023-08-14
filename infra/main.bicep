@@ -11,6 +11,8 @@ param location string
 
 param vmCustomData string
 param adminUsername string
+
+@secure()
 param adminPasswordOrKey string
 
 resource resourceGroup 'Microsoft.Resources/resourceGroups@2021-04-01' = {

@@ -7,6 +7,7 @@ param nsgId string
 
 param vmCustomData string
 param adminUsername string
+@secure()
 param adminPasswordOrKey string
 
 param authenticationType string = 'sshPublicKey'
