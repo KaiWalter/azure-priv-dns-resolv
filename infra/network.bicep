@@ -237,9 +237,19 @@ resource fwruleSet 'Microsoft.Network/dnsForwardingRulesets@2022-07-01' = {
   }
 }
 
-resource resolverLink 'Microsoft.Network/dnsForwardingRulesets/virtualNetworkLinks@2022-07-01' = {
+resource resolverSpokeLink 'Microsoft.Network/dnsForwardingRulesets/virtualNetworkLinks@2022-07-01' = {
   parent: fwruleSet
-  name: 'vnet-link'
+  name: 'vnet-spoke-link'
+  properties: {
+    virtualNetwork: {
+      id: vnetSpoke.id
+    }
+  }
+}
+
+resource resolverHubLink 'Microsoft.Network/dnsForwardingRulesets/virtualNetworkLinks@2022-07-01' = {
+  parent: fwruleSet
+  name: 'vnet-hub-link'
   properties: {
     virtualNetwork: {
       id: vnetHub.id
